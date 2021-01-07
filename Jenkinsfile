@@ -22,6 +22,10 @@ pipeline {
         stage('Build & Push Docker Image') {
             when {
                 branch 'master'
+                allOf {
+                    expression { return params.VERSION != 'none' }
+                    expression { return params.VERSION != '' }
+                }
             }
 
             steps {
