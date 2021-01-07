@@ -22,7 +22,6 @@ pipeline {
     stages {
         stage('Build & Push Docker Image') {
             when {
-                branch 'master'
                 allOf {
                     expression { return params.VERSION != 'none' }
                     expression { return params.VERSION != '' }
@@ -40,7 +39,6 @@ pipeline {
 
         stage('Trigger deploy') {
             when {
-                branch 'master'
                 expression { return params.DEPLOY }
                 allOf {
                     expression { return params.VERSION != 'none' }
