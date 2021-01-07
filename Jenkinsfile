@@ -16,6 +16,7 @@ pipeline {
 
     parameters {
         string defaultValue: 'none', description: 'Version of Artifact in Nexus', name: 'VERSION', trim: true
+        booleanParam defaultValue: false, description: 'Deploy to Kubernetes', name: 'DEPLOY'
     }
 
     stages {
@@ -37,6 +38,20 @@ pipeline {
             }
         }
 
+        stage('Trigger deploy') {
+            when {
+                branch 'master'
+                expression { return params.DEPLOY }
+                allOf {
+                    expression { return params.VERSION != 'none' }
+                    expression { return params.VERSION != '' }
+                }
+            }
+
+            steps {
+                build wait: false, job: '../Helm/nmapserviceproxy', parameters: [string(name: 'VERSION', value: params.VERSION)]
+            }
+        }
     }
 
     post {
