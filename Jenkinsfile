@@ -19,6 +19,10 @@ pipeline {
         booleanParam defaultValue: false, description: 'Deploy to Kubernetes', name: 'DEPLOY'
     }
 
+    environment {
+        DOCKER_CRED=credentials("750504ce-6f4f-4252-9b2b-5814bd561430")
+    }
+
     stages {
         stage('Build & Push Docker Image') {
             when {
@@ -29,11 +33,9 @@ pipeline {
             }
 
             steps {
-                sh "docker build --build-arg 'VERSION=${params.VERSION}' -t rafaelostertag/nmap-service-proxy:${params.VERSION} ."
-                withCredentials([usernamePassword(credentialsId: '750504ce-6f4f-4252-9b2b-5814bd561430', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
-                    sh 'docker login --username "$USERNAME" --password "$PASSWORD"'
-                    sh "docker push rafaelostertag/nmap-service-proxy:${params.VERSION}"
-                }
+                sh 'docker build --build-arg VERSION=${VERSION} -t $DOCKER_CRED_USR/nmap-service-proxy:${VERSION} .'
+                sh 'docker login --username "$DOCKER_CRED_USR" --password "$DOCKER_CRED_PSW"'
+                sh 'docker push $DOCKER_CRED_USR/nmap-service-proxy:${VERSION}'
             }
         }
 
