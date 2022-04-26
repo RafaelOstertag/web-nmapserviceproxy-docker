@@ -75,5 +75,7 @@ workflows:
             - build-docker-image-amd64
             - build-docker-image-arm64
       - trigger-pipeline:
-           context:
-            - circle-ci
+          requires:
+            - create-multi-arch-manifest
+          context:
+          - circle-ci
