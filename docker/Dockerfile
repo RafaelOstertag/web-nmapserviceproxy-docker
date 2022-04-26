@@ -2,7 +2,7 @@ FROM curlimages/curl:latest AS download
 ARG VERSION
 ARG REPOSITORY_USER
 ARG REPOSITORY_PASSWORD
-RUN curl curl -Lf -u "${REPOSITORY_USER}:${REPOSITORY_PASSWORD}"  -o /tmp/app.jar https://rafaelostertag.jfrog.io/artifactory/maven/ch/guengel/webtools/nmapserviceproxy/${VERSION}/nmapserviceproxy-${VERSION}-jar-with-dependencies.jar
+RUN curl -Lf -u "${REPOSITORY_USER}:${REPOSITORY_PASSWORD}"  -o /tmp/app.jar https://rafaelostertag.jfrog.io/artifactory/maven/ch/guengel/webtools/nmapserviceproxy/${VERSION}/nmapserviceproxy-${VERSION}-jar-with-dependencies.jar
 
 FROM openjdk:11-jre-slim
 
